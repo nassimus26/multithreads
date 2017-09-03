@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import linky.api.*;
-import org.nassimus.thread.BufferedExecutorWithFlowControl;
+import org.nassimus.thread.BufferedFlowControlExecutor;
 import org.nassimus.thread.BuffredCallable;
-import org.nassimus.thread.Callable;
-import org.nassimus.thread.ExecutorWithFlowControl;
+import org.nassimus.thread.FlowControlExecutor;
 import org.scanner.FastScanner;
 import org.scanner.MoveEnum;
 import org.slf4j.Logger;
@@ -17,10 +16,10 @@ import org.slf4j.LoggerFactory;
 public class ProcessLinkyFile extends ProcessGeneric {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessLinkyFile.class);
-    private BufferedExecutorWithFlowControl<Object> chunkProcess;
-    private BufferedExecutorWithFlowControl<byte[]> writerProcess;
+    private BufferedFlowControlExecutor<Object> chunkProcess;
+    private BufferedFlowControlExecutor<byte[]> writerProcess;
     
-    public final BufferedExecutorWithFlowControl<byte[]> getWriterProcess() {
+    public final BufferedFlowControlExecutor<byte[]> getWriterProcess() {
         return writerProcess;
     }
 
@@ -59,7 +58,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
                 outputStream.write( res );
             }
         };
-        writerProcess = new BufferedExecutorWithFlowControl<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
+        writerProcess = new BufferedFlowControlExecutor<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
             @Override
             public boolean isWorkDone() {             
                 return chunkProcess.isShutdown();
@@ -79,8 +78,8 @@ public class ProcessLinkyFile extends ProcessGeneric {
                 }
             }
         };
-        chunkProcess = new BufferedExecutorWithFlowControl<Object>(chunkProcessTask,
-                500, ExecutorWithFlowControl.getNbCores()-1, 100, "ChunkProcess"){
+        chunkProcess = new BufferedFlowControlExecutor<Object>(chunkProcessTask,
+                500, FlowControlExecutor.getNbCores()-1, 100, "ChunkProcess"){
             @Override
             public boolean isWorkDone() {             
                 return scanner.isStreamTerminated();

@@ -3,7 +3,7 @@
 import linky.api.RowsDataHandler;
 import linky.api.XmlNode;
 import linky.api.XmlNodeData;
-import org.nassimus.thread.BufferedExecutorWithFlowControl;
+import org.nassimus.thread.BufferedFlowControlExecutor;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
         res[res.length-1]='\n';
         try {
              //System.out.println(n.incrementAndGet()+" "+new String(res));
-             BufferedExecutorWithFlowControl<byte[]> process = ((ProcessLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriterProcess();
+            BufferedFlowControlExecutor<byte[]> process = ((ProcessLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriterProcess();
             process.submit( res );
         } catch (InterruptedException e) {
             e.printStackTrace();
