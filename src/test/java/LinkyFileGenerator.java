@@ -30,19 +30,19 @@ public class LinkyFileGenerator {
         OutputStream outputStream = new FileOutputStream( new File( "src/main/resources/LINKY_GEN.xml" ) );
         outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n".getBytes());
         String ID_PRM = "<Id_PRM>#{Id_PRM}</Id_PRM>\r\n";
-        for (long i=1;i<50;i++){
+        for (long i=1;i<=10;i++){
             outputStream.write("<R151>\r\n".getBytes());
             if (i%2==0)
                 outputStream.write( 
                     Entete.
                         replace("#{Numero_Abonnement}", "Numero_Abonnement_"+i).getBytes() );
-            for (long j=1;j<6;j++){
+            for (long j=1;j<=20;j++){
                 outputStream.write("<PRM>\r\n".getBytes());
                 if (i%2==0)
                     outputStream.write(  
                         ID_PRM.
                             replace("#{Id_PRM}", "Id_PRM_R151-"+i+"_"+j).getBytes() );
-                for (long k=1;k<2000;k++){
+                for (long k=1;k<=1400;k++){
                     outputStream.write((
                         Donnees_Releve. 
                             replace("#{Date_Releve}", "Date_Releve_R151-"+i+"_PRM-"+j+"_"+k).
