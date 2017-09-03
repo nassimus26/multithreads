@@ -66,6 +66,11 @@
         </dependency>
         <dependency>
             <groupId>org.nassimus</groupId>
+            <artifactId>FlowControl</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nassimus</groupId>
             <artifactId>FastScanner</artifactId>
             <version>0.1</version>
         </dependency>
