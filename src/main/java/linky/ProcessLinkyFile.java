@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import linky.api.*;
-import org.nassimus.thread.BufferedFlowControlExecutor;
-import org.nassimus.thread.BuffredCallable;
+import org.nassimus.thread.BufferedBatchFlowControlExecutor;
+import org.nassimus.thread.BufferedBatchCallable;
 import org.nassimus.thread.FlowControlExecutor;
 import org.scanner.FastScanner;
 import org.scanner.MoveEnum;
@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 public class ProcessLinkyFile extends ProcessGeneric {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessLinkyFile.class);
-    private BufferedFlowControlExecutor<Object> chunkProcess;
-    private BufferedFlowControlExecutor<byte[]> writerProcess;
+    private BufferedBatchFlowControlExecutor<Object> chunkProcess;
+    private BufferedBatchFlowControlExecutor<byte[]> writerProcess;
     
-    public final BufferedFlowControlExecutor<byte[]> getWriterProcess() {
+    public final BufferedBatchFlowControlExecutor<byte[]> getWriterProcess() {
         return writerProcess;
     }
 
@@ -42,7 +42,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
     }
     @Override
     public void initTheProcess(final FastScanner scanner, final OutputStream outputStream) {
-        BuffredCallable<byte[]> writerProcessTask = new BuffredCallable<byte[]>(){
+        BufferedBatchCallable<byte[]> writerProcessTask = new BufferedBatchCallable<byte[]>(){
             @Override
             public void call(Object[] cols) throws Throwable {
                 int size = 0;
@@ -58,13 +58,13 @@ public class ProcessLinkyFile extends ProcessGeneric {
                 outputStream.write( res );
             }
         };
-        writerProcess = new BufferedFlowControlExecutor<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
+        writerProcess = new BufferedBatchFlowControlExecutor<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
             @Override
             public boolean isWorkDone() {             
                 return chunkProcess.isShutdown();
             }
         };
-        BuffredCallable<Object> chunkProcessTask = new BuffredCallable<Object>(){
+        BufferedBatchCallable<Object> chunkProcessTask = new BufferedBatchCallable<Object>(){
             @Override
             public void call(Object[] cols) throws Throwable {
                 for (int i=0;i<cols.length;i++){
@@ -78,7 +78,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
                 }
             }
         };
-        chunkProcess = new BufferedFlowControlExecutor<Object>(chunkProcessTask,
+        chunkProcess = new BufferedBatchFlowControlExecutor<Object>(chunkProcessTask,
                 500, FlowControlExecutor.getNbCores()-1, 100, "ChunkProcess"){
             @Override
             public boolean isWorkDone() {             
