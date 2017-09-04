@@ -62,7 +62,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
         };
         writerProcess = new BufferedBatchFlowControlExecutor<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
             @Override
-            public boolean isWorkDone() {             
+            public boolean isSubmitsEnds() {
                 return chunkProcess.isShutdown();
             }
         };
@@ -83,7 +83,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
         chunkProcess = new BufferedBatchFlowControlExecutor<Object>(chunkProcessTask,
                 500, FlowControlExecutor.getNbCores()-1, 100, "ChunkProcess"){
             @Override
-            public boolean isWorkDone() {             
+            public boolean isSubmitsEnds() {
                 return scanner.isStreamTerminated();
             }
         };
