@@ -132,8 +132,8 @@ public class ProcessLinkyFile extends ProcessGeneric {
     @Override
     public void onProcessEnd(OutputStream outputStream) {
         try {            
-            chunkProcess.waitAndFlushAndShutDown();
-            writerProcess.waitAndFlushAndShutDown();
+            chunkProcess.waitAndFlushAndShutDownWithException();
+            writerProcess.waitAndFlushAndShutDownWithException();
         } catch (Throwable e) {
             logger.error( e.getMessage(), e );
         }
