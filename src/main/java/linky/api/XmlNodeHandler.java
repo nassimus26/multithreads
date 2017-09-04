@@ -1,10 +1,10 @@
 package linky.api;
 
-import java.io.OutputStream;
-
 import org.scanner.FastScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.OutputStream;
 
 public abstract class XmlNodeHandler {
     private static final Logger logger = LoggerFactory.getLogger(XmlNodeHandler.class);

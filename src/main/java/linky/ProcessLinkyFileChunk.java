@@ -1,14 +1,14 @@
 package linky;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import linky.api.XmlNode;
 import linky.api.XmlNodeData;
 import org.scanner.FastScanner;
 import org.scanner.MoveEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
 public class ProcessLinkyFileChunk {
     
     private static final Logger logger = LoggerFactory.getLogger(ProcessLinkyFileChunk.class);

@@ -1,11 +1,11 @@
+import linky.ProcessLinkyFile;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.nassimus.date.UtilsChrono;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import linky.ProcessLinkyFile;
-import org.nassimus.date.UtilsChrono;
 
 public class ProcessLinkyFileTest {
    /* @Test

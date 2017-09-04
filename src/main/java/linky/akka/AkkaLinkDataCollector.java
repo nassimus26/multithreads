@@ -1,16 +1,14 @@
  package linky.akka;
 
-import linky.R151DelimiterEnum;
-import linky.R151ExpectedKeysEnum;
-import linky.api.RowsDataHandler;
-import linky.api.XmlNode;
-import linky.api.XmlNodeData;
+ import linky.R151DelimiterEnum;
+ import linky.R151ExpectedKeysEnum;
+ import linky.api.RowsDataHandler;
+ import linky.api.XmlNode;
+ import linky.api.XmlNodeData;
 
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+ import java.io.OutputStream;
+ import java.util.EnumMap;
+ import java.util.Map;
 
 
  public class AkkaLinkDataCollector extends XmlNodeData<R151ExpectedKeysEnum, byte[]> {

@@ -1,17 +1,19 @@
 package linky;
 
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import linky.api.*;
-import org.nassimus.thread.BufferedBatchFlowControlExecutor;
+import linky.api.ProcessGeneric;
+import linky.api.XmlNode;
+import linky.api.XmlNodeHandler;
 import org.nassimus.thread.BufferedBatchCallable;
+import org.nassimus.thread.BufferedBatchFlowControlExecutor;
 import org.nassimus.thread.FlowControlExecutor;
 import org.scanner.FastScanner;
 import org.scanner.MoveEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProcessLinkyFile extends ProcessGeneric {
 

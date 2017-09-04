@@ -1,16 +1,14 @@
  package linky.api;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
+ import org.scanner.FastByteArrayOutputStream;
+ import org.scanner.FastScanner;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
 
-import org.scanner.FastByteArrayOutputStream;
-import org.scanner.FastScanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+ import java.io.InputStream;
+ import java.io.OutputStream;
+ import java.util.Arrays;
+ import java.util.List;
 
 public abstract class ProcessGeneric {    
     private static final Logger logger = LoggerFactory.getLogger(ProcessGeneric.class);
