@@ -46,7 +46,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
     public void initTheProcess(final FastScanner scanner, final OutputStream outputStream) {
         BufferedBatchCallable<byte[]> writerProcessTask = new BufferedBatchCallable<byte[]>(){
             @Override
-            public void call(Object[] cols) throws Throwable {
+            public void call(Object[] cols) throws Exception {
                 int size = 0;
                 for (int i=0;i<cols.length;i++)
                     size += ((byte[])cols[i]).length;
@@ -62,13 +62,18 @@ public class ProcessLinkyFile extends ProcessGeneric {
         };
         writerProcess = new BufferedBatchFlowControlExecutor<byte[]>(writerProcessTask, 500, 1, 100, "WriterProcess"){
             @Override
+            public void handleException(Exception e) {
+                e.printStackTrace();
+            }
+
+            @Override
             public boolean isSubmitsEnds() {
                 return chunkProcess.isShutdown();
             }
         };
         BufferedBatchCallable<Object> chunkProcessTask = new BufferedBatchCallable<Object>(){
             @Override
-            public void call(Object[] cols) throws Throwable {
+            public void call(Object[] cols) throws Exception {
                 for (int i=0;i<cols.length;i++){
                     XmlNode node = (XmlNode) ((Object[])cols[i])[1];
                     if (node.getDelimiter()==R151DelimiterEnum.Donnees_Releve)
@@ -82,6 +87,11 @@ public class ProcessLinkyFile extends ProcessGeneric {
         };
         chunkProcess = new BufferedBatchFlowControlExecutor<Object>(chunkProcessTask,
                 500, FlowControlExecutor.getNbCores()-1, 100, "ChunkProcess"){
+            @Override
+            public void handleException(Exception e) {
+                e.printStackTrace();
+            }
+
             @Override
             public boolean isSubmitsEnds() {
                 return scanner.isStreamTerminated();
