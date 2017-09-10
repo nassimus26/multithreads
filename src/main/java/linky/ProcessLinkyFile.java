@@ -71,6 +71,7 @@ public class ProcessLinkyFile extends ProcessGeneric {
                 return chunkProcess.isShutdown();
             }
         };
+
         BufferedBatchCallable<Object> chunkProcessTask = new BufferedBatchCallable<Object>(){
             @Override
             public void call(Object[] cols) throws Exception {

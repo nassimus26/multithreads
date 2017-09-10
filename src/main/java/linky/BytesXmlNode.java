@@ -2,6 +2,8 @@ package linky;
 
 import linky.api.XmlNode;
 
+import java.util.Arrays;
+
 public class BytesXmlNode {
     byte[] chunk;
     XmlNode xmlNode;
@@ -17,5 +19,13 @@ public class BytesXmlNode {
 
     public XmlNode getXmlNode() {
         return xmlNode;
+    }
+
+    @Override
+    public String toString() {
+        return "BytesXmlNode{" +
+                "chunk=" + new String(chunk) +
+                ", xmlNode=" + xmlNode +
+                '}';
     }
 }

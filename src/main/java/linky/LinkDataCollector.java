@@ -20,7 +20,7 @@
     public LinkDataCollector(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
-     static AtomicInteger n = new AtomicInteger();
+     static AtomicInteger n = new AtomicInteger(1);
 
      private void writeResult(XmlNode node) {
         final byte[] Numero_Abonnement = data.get(R151ExpectedKeysEnum.Numero_Abonnement);
@@ -42,7 +42,7 @@
         res[res.length-2]='\r';
         res[res.length-1]='\n';
         try {
-             //System.out.println(n.incrementAndGet()+" "+new String(res));
+           //System.out.println(n.incrementAndGet()+" "+new String(res));
             BufferedBatchFlowControlExecutor<byte[]> process = ((ProcessLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriterProcess();
             process.submit( res );
         } catch (InterruptedException e) {
@@ -53,7 +53,7 @@
     public void put(XmlNode node, R151ExpectedKeysEnum key, byte[] value) {
         if (isConsumed)
             return;
-        //System.out.println(n.incrementAndGet()+" "+key+" "+new String(value));
+        //System.out.println(n.get()+" "+key+" "+new String(value));
         data.put(key, value);
         XmlNode R151Node;
         switch ((R151DelimiterEnum)node.getDelimiter()) {

@@ -17,7 +17,7 @@ public class WriterSubscriber implements Subscriber<byte[]> {
         subscription.request(1);
         this.subscription = subscription;
     }
-    AtomicInteger n = new AtomicInteger();
+  //  AtomicInteger n = new AtomicInteger();
     boolean complete = false;
 
     public boolean isComplete() {
@@ -27,13 +27,15 @@ public class WriterSubscriber implements Subscriber<byte[]> {
     @Override
     public void onNext(byte[] bytes) {
         try {
-      //      stream.write(bytes);
+            //stream.write((n.get()+" ").getBytes());
+            stream.write(bytes);
             subscription.request(1);
-            if(n.incrementAndGet()==489755)
+            /*
+            if(n.incrementAndGet()==280000)
                 synchronized (this) {
-                    notify();
+                    notifyAll();
                 }
-
+*/
         } catch (Exception e) {
             e.printStackTrace();
         }

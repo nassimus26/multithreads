@@ -16,11 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
+
 import reactor.core.scheduler.Schedulers;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /*
 * @Author : Moualek Nassim cd_boite@yahoo.fr
@@ -92,12 +95,7 @@ public class ReactorLinkyFile extends ProcessGeneric {
                     ProcessLinkyFileChunk.processChunk_Id_RPM((byte[]) chunk, outputStream, node, new ReactorLinkDataCollector(outputStream));
                //subscription.request(1);
 
-                if (++seen > batchSize-1/2) {
-                    seen = 0;
-                    subscription.cancel();
-                    subscription.request(batchSize/2);
-                }else
-                    subscription.request(1);
+                subscription.request(1);
             }
 
             @Override
@@ -110,13 +108,8 @@ public class ReactorLinkyFile extends ProcessGeneric {
 
             }
         };
-        Flux<byte[]> writeFlux = Flux.<byte[]>create(fluxSink -> {
-            setWriteFluxSink(fluxSink);
-        });
-        writerSubscriber = new WriterSubscriber(outputStream);
-        writeFlux.subscribe(writerSubscriber);
-        writeFlux.publish();
         Flux<BytesXmlNode> xmlChunkParser = Flux.create(fluxSink -> {
+            //final FluxSink<BytesXmlNode> fluxSink = fluxSink_.serialize();
             En_Tete_Flux_Node.setNodeHandler(new XmlNodeHandler(this) {
                 @Override
                 public void onNodeVisit(final FastScanner scanner, final OutputStream outputStream, final XmlNode node) {
@@ -158,12 +151,30 @@ public class ReactorLinkyFile extends ProcessGeneric {
         });
 
         //xmlChunkParser.buffer(150);
-        xmlChunkParser.parallel(15).runOn(Schedulers.parallel()).subscribe(processChunk);
-        xmlChunkParser.publish();
+        Flux<byte[]> writeFlux = Flux.<byte[]>create(fluxSink -> {
+            setWriteFluxSink(fluxSink);
+        });
+        t = new Thread(){
+            @Override
+            public void run() {
+                writerSubscriber = new WriterSubscriber(outputStream);
+                writeFlux.subscribe(writerSubscriber);
+                writeFlux.publish();
+                xmlChunkParser.parallel().runOn(Schedulers.fromExecutor(Executors.newFixedThreadPool(8))).subscribe(processChunk);
+                xmlChunkParser.publish();
+            }
+        };
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
-
+    Thread t;
     @Override
     public void onProcessEnd(OutputStream outputStream) {
+/*
         try {
             System.out.println("waiting");
             synchronized (writerSubscriber){
@@ -172,7 +183,7 @@ public class ReactorLinkyFile extends ProcessGeneric {
             System.out.println("waking");
         } catch (Throwable e) {
             logger.error( e.getMessage(), e );
-        }
+        }*/
     }
     
 }
