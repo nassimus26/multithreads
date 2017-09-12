@@ -160,7 +160,7 @@ public class ReactorLinkyFile extends ProcessGeneric {
                 writerSubscriber = new WriterSubscriber(outputStream);
                 writeFlux.subscribe(writerSubscriber);
                 writeFlux.publish();
-                xmlChunkParser.parallel().runOn(Schedulers.fromExecutor(Executors.newFixedThreadPool(8))).subscribe(processChunk);
+                xmlChunkParser.parallel(8).runOn(Schedulers.fromExecutor(Executors.newFixedThreadPool(8))).subscribe(processChunk);
                 xmlChunkParser.publish();
             }
         };

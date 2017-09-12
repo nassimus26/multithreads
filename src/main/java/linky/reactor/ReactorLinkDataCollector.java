@@ -38,7 +38,7 @@ import java.util.Map;
          System.arraycopy(Puissance_Maximale_Value, 0, res, Numero_Abonnement.length+Id_PRM.length+Date_Releve.length+Releve_Value.length+4, Puissance_Maximale_Value.length);
          res[res.length-2]='\r';
          res[res.length-1]='\n';
-         System.out.println(new String(res));
+        // System.out.println(new String(res));
          ((ReactorLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriteFluxSink().next(res);
      }
 

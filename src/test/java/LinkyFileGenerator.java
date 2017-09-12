@@ -32,13 +32,13 @@ public class LinkyFileGenerator {
         String ID_PRM = "<Id_PRM>#{Id_PRM}</Id_PRM>\r\n";
         for (long i=1;i<=10;i++){
             outputStream.write("<R151>\r\n".getBytes());
-            if (i%2==0)
+            if (i%2==0 || true)
                 outputStream.write( 
                     Entete.
                         replace("#{Numero_Abonnement}", "Numero_Abonnement_"+i).getBytes() );
             for (long j=1;j<=20;j++){
                 outputStream.write("<PRM>\r\n".getBytes());
-                if (i%2==0)
+                if (i%2==0 || true)
                     outputStream.write(  
                         ID_PRM.
                             replace("#{Id_PRM}", "Id_PRM_R151-"+i+"_"+j).getBytes() );
@@ -49,13 +49,13 @@ public class LinkyFileGenerator {
                             replace("#{Classe_Temporelle_Distributeur_Value}", "Classe_Temporelle_Distributeur_Value_R151-"+i+"_PRM-"+j+"_"+k).
                             replace("#{Puissance_Maximale_Value}", "Puissance_Maximale_Value_R151-"+i+"_PRM-"+j+"_"+k)+"</Donnees_Releve>\r\n").getBytes());
                 }
-                if (i%2==1)
+                if (i%2==1 && false)
                     outputStream.write(  
                         ID_PRM.
                             replace("#{Id_PRM}", "Id_PRM_R151-"+i+"_"+j).getBytes() );
                 outputStream.write("</PRM>\r\n".getBytes() );
             }                
-            if (i%2==1)
+            if (i%2==1 && false)
                 outputStream.write( 
                     Entete.
                         replace("#{Numero_Abonnement}", "Numero_Abonnement_"+i).getBytes() );

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<R151>	
+<R151>
+	<En_Tete_Flux>
+		<Identifiant_Flux>R151</Identifiant_Flux>
+		<Libelle_Flux>Puissances maximales et index des PRM du segment C5 sur abonnement</Libelle_Flux>
+		<Version_XSD>1.2.0</Version_XSD>
+		<Identifiant_Emetteur>ERDF</Identifiant_Emetteur>
+		<Identifiant_Destinataire>17X1111111111111</Identifiant_Destinataire>
+		<Date_Creation>2015-08-07T18:36:47.000+01:00</Date_Creation>
+		<Identifiant_Contrat>GRD-F666</Identifiant_Contrat>
+		<Numero_Abonnement>1234567890</Numero_Abonnement>
+		<Unite_Mesure_Index>Wh</Unite_Mesure_Index>
+		<Unite_Mesure_Puissance>W</Unite_Mesure_Puissance>
+	</En_Tete_Flux>
 	<PRM>		
 		<Donnees_Releve>
 			<Date_Releve>2015-01-07</Date_Releve>
@@ -106,16 +118,5 @@
 			</Puissance_Maximale>
 		</Donnees_Releve>
 	</PRM>
-	<En_Tete_Flux>
-		<Identifiant_Flux>R151</Identifiant_Flux>
-		<Libelle_Flux>Puissances maximales et index des PRM du segment C5 sur abonnement</Libelle_Flux>
-		<Version_XSD>1.2.0</Version_XSD>
-		<Identifiant_Emetteur>ERDF</Identifiant_Emetteur>
-		<Identifiant_Destinataire>17X1111111111111</Identifiant_Destinataire>
-		<Date_Creation>2015-08-07T18:36:47.000+01:00</Date_Creation>
-		<Identifiant_Contrat>GRD-F666</Identifiant_Contrat>
-		<Numero_Abonnement>1234567890</Numero_Abonnement>
-		<Unite_Mesure_Index>Wh</Unite_Mesure_Index>
-		<Unite_Mesure_Puissance>W</Unite_Mesure_Puissance>
-	</En_Tete_Flux>
+
 </R151>

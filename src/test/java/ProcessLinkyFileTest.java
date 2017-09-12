@@ -12,7 +12,7 @@ public class ProcessLinkyFileTest {
     public void processSimpleLinkyTest() throws Exception {
         processLinkyTest("ERDF_R151_17X1111111111111_GRD-F666_1234567890_00001_M_00001_00001_20151002135511.xml", false);
     }
-    
+
     @Test
     public void processMuliplePRMTest() throws Exception {
         processLinkyTest("LINKY_MULTIPLE_RPM.xml", false);
@@ -22,12 +22,12 @@ public class ProcessLinkyFileTest {
     public void processMulipleR151Test() throws Exception {
         processLinkyTest("LINKY_MULTIPLE_R151.xml", false);
     }
-*/ 
+*/
     /*@Test
     public void processMuliplePRMUnOrderedTest() throws Exception {
         processLinkyTest("LINKY_MULTIPLE_RPM_UnOrdered.xml", true);
     }*/
-   
+
     @Test
     public void processMuliplePRMUnOrderedTest() throws Exception {
         processLinkyTest("LINKY_GEN.xml", true);

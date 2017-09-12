@@ -65,12 +65,12 @@
             <version>20131018</version>
         </dependency>
         <dependency>
-            <groupId>org.nassimus</groupId>
+            <groupId>org.github.nassimus26</groupId>
             <artifactId>FlowControl</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.nassimus</groupId>
+            <groupId>org.github.nassimus26</groupId>
             <artifactId>FastScanner</artifactId>
             <version>0.1</version>
         </dependency>
