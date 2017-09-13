@@ -1,17 +1,19 @@
- package linky;
+package linky;
 
- import linky.api.RowsDataHandler;
- import linky.api.XmlNode;
- import linky.api.XmlNodeData;
- import org.nassimus.thread.BufferedBatchFlowControlExecutor;
+import linky.api.RowsDataHandler;
+import linky.api.XmlNode;
+import linky.api.XmlNodeData;
+import org.nassimus.thread.BufferedBatchFlowControlExecutor;
 
- import java.io.OutputStream;
- import java.util.EnumMap;
- import java.util.Map;
- import java.util.concurrent.atomic.AtomicInteger;
+import java.io.OutputStream;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
- public class LinkDataCollector extends XmlNodeData<R151ExpectedKeysEnum, byte[]> {
+public class LinkDataCollector extends XmlNodeData<R151ExpectedKeysEnum, byte[]> {
 
     private boolean isConsumed = false;
     private OutputStream outputStream;
@@ -20,9 +22,9 @@
     public LinkDataCollector(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
-     static AtomicInteger n = new AtomicInteger(1);
+    static AtomicInteger n = new AtomicInteger();
 
-     private void writeResult(XmlNode node) {
+    private void writeResult(XmlNode node) {
         final byte[] Numero_Abonnement = data.get(R151ExpectedKeysEnum.Numero_Abonnement);
         final byte[] Id_PRM = data.get(R151ExpectedKeysEnum.Id_PRM);
         final byte[] Date_Releve = data.get(R151ExpectedKeysEnum.Date_Releve);
@@ -42,19 +44,18 @@
         res[res.length-2]='\r';
         res[res.length-1]='\n';
         try {
-           //System.out.println(n.incrementAndGet()+" "+new String(res));
-            BufferedBatchFlowControlExecutor<byte[]> process = ((ProcessLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriterProcess();
+            //System.out.println(n.incrementAndGet()+" "+new String(res));
+            BufferedBatchFlowControlExecutor<byte[], byte[][]> process = ((ProcessLinkyFile)node.getNodeHandler().getProcessGeneric()).getWriterProcess();
             process.submit( res );
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    static AtomicInteger x = new AtomicInteger();
     @Override
     public void put(XmlNode node, R151ExpectedKeysEnum key, byte[] value) {
         if (isConsumed)
             return;
-        //System.out.println(n.get()+" "+key+" "+new String(value));
+        //System.out.println(n.incrementAndGet()+" "+key+" "+new String(value));
         data.put(key, value);
         XmlNode R151Node;
         switch ((R151DelimiterEnum)node.getDelimiter()) {
@@ -64,43 +65,43 @@
                 RowsDataHandler prms = RPM.getRowsDataHandler();
                 if (prms!=null) {
                     for (XmlNode rpm: prms.getRows()) {
-                        XmlNode donnee = rpm.findChild(R151DelimiterEnum.Donnees_Releve);                                              
-                        RowsDataHandler nodes = donnee.getRowsDataHandler();                        
+                        XmlNode donnee = rpm.findChild(R151DelimiterEnum.Donnees_Releve);
+                        RowsDataHandler nodes = donnee.getRowsDataHandler();
                         if (nodes!=null) {
                             boolean done = false;
                             for (XmlNode donneNode :  nodes.getRows()) {
                                 if (donneNode==null)
                                     continue;
-                                   XmlNodeData data = donneNode.getNodeData();
-                                   if (data!=null){
-                                       if (data.write(donneNode, key, value))
-                                         done = true;
-                                   }
-                               } 
+                                XmlNodeData data = donneNode.getNodeData();
+                                if (data!=null){
+                                    if (data.write(donneNode, key, value))
+                                        done = true;
+                                }
+                            }
                             if (done){
                                 nodes.clearRows();
                             }
                         }
-                        }                                                    
-                    }                   
-            break;
+                    }
+                }
+                break;
             case Id_PRM:
-                    RowsDataHandler nodes = node.getNext().getRowsDataHandler();
-                    if (nodes!=null) {
-                        boolean done = false;
-                        for (XmlNode donneNode : nodes.getRows()) {
-                            if (donneNode==null)
-                                continue;
-                            XmlNodeData data = donneNode.getNodeData();
-                            if (data!=null)
-                                if (data.write(donneNode, key, value))
-                                    done= true;                        
-                        }    
-                        if (done){
-                            nodes.clearRows();
-                        }
-                    }                
-            break;
+                RowsDataHandler nodes = node.getNext().getRowsDataHandler();
+                if (nodes!=null) {
+                    boolean done = false;
+                    for (XmlNode donneNode : nodes.getRows()) {
+                        if (donneNode==null)
+                            continue;
+                        XmlNodeData data = donneNode.getNodeData();
+                        if (data!=null)
+                            if (data.write(donneNode, key, value))
+                                done= true;
+                    }
+                    if (done){
+                        nodes.clearRows();
+                    }
+                }
+                break;
             case Donnees_Releve:
                 boolean num_ab = data.containsKey( R151ExpectedKeysEnum.Numero_Abonnement );
                 boolean Id_PRM = data.containsKey( R151ExpectedKeysEnum.Id_PRM );
@@ -111,9 +112,9 @@
                         XmlNodeData En_Tete_Flux_Data = R151Node.findChild( R151DelimiterEnum.En_Tete_Flux ).getNodeData();
                         if ( En_Tete_Flux_Data!=null )
                             if (write(node, R151ExpectedKeysEnum.Numero_Abonnement, (byte[]) En_Tete_Flux_Data.get(R151ExpectedKeysEnum.Numero_Abonnement))){
-                                donnee_rows.removeRow(node); 
+                                donnee_rows.removeRow(node);
                                 return;
-                            }    
+                            }
                     }
                     if (!Id_PRM){
                         XmlNodeData ID_PRM_Data = R151Node.findChild( R151DelimiterEnum.Id_PRM ).getNodeData();
@@ -121,21 +122,21 @@
                             if (write(node, R151ExpectedKeysEnum.Id_PRM, (byte[]) ID_PRM_Data.get(R151ExpectedKeysEnum.Id_PRM))){
                                 donnee_rows.removeRow(node);
                                 return;
-                            }   
-                        }
+                            }
                     }
+                }
                 if ( !isConsumed )
-                    checkState(node);  
+                    checkState(node);
                 if (isConsumed)
                     donnee_rows.removeRow(node);
-        }          
+        }
     }
-    
+
     @Override
     public boolean isConsumed() {
         return isConsumed;
     }
-    
+
     public boolean isReady() {
         return data.keySet().size() == R151ExpectedKeysEnum.values().length;
     }
@@ -146,26 +147,26 @@
     }
 
     @Override
-    public boolean write(XmlNode node, R151ExpectedKeysEnum key, byte[] value) {  
+    public boolean write(XmlNode node, R151ExpectedKeysEnum key, byte[] value) {
         if (value==null)
             return isConsumed;
         data.put(key, value);
-        checkState(node);  
+        checkState(node);
         return isConsumed;
     }
-    
-    private void checkState(XmlNode node) {    
+
+    private void checkState(XmlNode node) {
         if (!isConsumed)
             if (isReady())
-            synchronized (this) {
-                if (!isConsumed){
-                    isConsumed = true;                    
-                    writeResult(node);
-                }                                  
-            }
+                synchronized (this) {
+                    if (!isConsumed){
+                        isConsumed = true;
+                        writeResult(node);
+                    }
+                }
     }
     @Override
     public byte[] get(R151ExpectedKeysEnum key) {
         return data.get(key);
-    }       
+    }
 }
