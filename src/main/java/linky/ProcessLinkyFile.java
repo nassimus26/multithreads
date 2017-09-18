@@ -43,15 +43,15 @@ public class ProcessLinkyFile extends ProcessGeneric {
     public void initTheProcess(final FastScanner scanner, final OutputStream outputStream) {
         BufferedBatchCallable<byte[]> writerProcessTask = new BufferedBatchCallable<byte[]>(){
             @Override
-            public void call(byte[][] cols) throws Exception {
+            public void call(List<byte[]> cols) throws Exception {
                 int size = 0;
-                for (int i=0;i<cols.length;i++)
-                    size += ((byte[])cols[i]).length;
+                for (int i=0;i<cols.size();i++)
+                    size += ((byte[])cols.get(i)).length;
                 byte[] res = new byte[size];
                 int pos = 0;
-                for (int i=0;i<cols.length;i++){
-                    int length = ((byte[])cols[i]).length;
-                    System.arraycopy(cols[i], 0, res, pos, length);
+                for (int i=0;i<cols.size();i++){
+                    int length = ((byte[])cols.get(i)).length;
+                    System.arraycopy(cols.get(i), 0, res, pos, length);
                     pos+=length;
                 }
                 outputStream.write( res );
@@ -70,10 +70,10 @@ public class ProcessLinkyFile extends ProcessGeneric {
         };
         BufferedBatchCallable<BytesXmlNode> chunkProcessTask = new BufferedBatchCallable<BytesXmlNode>(){
             @Override
-            public void call(BytesXmlNode[] cols) throws Exception {
-                for (int i=0;i<cols.length;i++){
-                    XmlNode node = (XmlNode) ((BytesXmlNode)cols[i]).xmlNode;
-                    byte[] chunk = ((BytesXmlNode)cols[i]).chunk;
+            public void call(List<BytesXmlNode> cols) throws Exception {
+                for (int i=0;i<cols.size();i++){
+                    XmlNode node = (XmlNode) ((BytesXmlNode)cols.get(i)).xmlNode;
+                    byte[] chunk = ((BytesXmlNode)cols.get(i)).chunk;
                     if (node.getDelimiter()==R151DelimiterEnum.Donnees_Releve)
                         ProcessLinkyFileChunk.processChunk_Donnees_Releves( chunk, outputStream, node, new LinkDataCollector(outputStream));
                     else if (node.getDelimiter()==R151DelimiterEnum.En_Tete_Flux)

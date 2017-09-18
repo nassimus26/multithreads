@@ -55,7 +55,7 @@ public abstract class ProcessGeneric {
         XmlNodeHandler nodeHandler;
         byte[] endParent = xmlNode.getDelimiter().getTagEnd();
          
-        while (( nextTag = scanner.retrieveNextRightTokenBytes('<', '>', tagReader))!=null) {   
+        while (( nextTag = scanner.retrieveNextRightTokenBytes('<', '>'))!=null) {
             //System.out.println(new String(nextTag));
             if (lastTag!=null && !Arrays.equals( nextTag, lastTag )){                
                 TagType tagType = isEndTagAndTagsAreEquals(nextTag, endParent);
@@ -72,7 +72,7 @@ public abstract class ProcessGeneric {
                 nodeHandler = tagNode.getNodeHandler();
                 if (nodeHandler!=null){
                     nodeHandler.onNodeVisit(scanner, outputStream, tagNode);                    
-                    byte[] endTag = scanner.retrieveNextRightTokenBytes('<', '>', tagReader);
+                    byte[] endTag = scanner.retrieveNextRightTokenBytes('<', '>');
                     if (isEndTagAndTagsAreEquals(endTag, endParent)==TagType.isEquals)
                         break;                   
                 }else{
